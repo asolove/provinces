@@ -19,7 +19,7 @@ var dynasties = Object.keys(dynastyDates).map(function(name) {
 });
 
 var selected = "Han"; // TODO calc from mouse
-var year = 777;
+var year = 300;
 var layer;
 
 var drawDynastyAxes = function() {
@@ -44,6 +44,15 @@ var drawDynastyAxes = function() {
 
     bar.classed("selected", function(d){ return d.name == selected; });
 
+    var dragging = false;
+    chart.on('mousedown', function(){ dragging = true; });
+    d3.select("body").on("mouseup", function(){ dragging = false; });
+    chart.on('mousemove', function(d){
+        if (!dragging) return;
+        year = scale.invert(d3.event.x);
+        layer.setFilter(filterByYear(year));
+    });
+
 };
 
 var init = function() {
@@ -53,7 +62,11 @@ var init = function() {
 
     layer = L.mapbox.markerLayer().addTo(map);
     layer.loadURL("prov_pgn.geojson");
-    layer.setFilter(function(feature){ 
+    layer.setFilter(filterByYear(year));
+};
+
+var filterByYear = function(year) {
+    return function(feature) {
         var ts = feature.properties.timespan;
         if(!ts) return false;
         if(typeof ts.end == 'string') {
@@ -61,7 +74,7 @@ var init = function() {
             ts.end = parseInt(ts.end, 10);
         }
         return ts.begin <= year && ts.end >= year;
-    });
+    };
 };
 
 window.onload = init;
