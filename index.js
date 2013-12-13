@@ -18,10 +18,12 @@ var dynasties = Object.keys(dynastyDates).map(function(name) {
     return { name: name, start: dynastyDates[name][0], end: dynastyDates[name][1] };
 });
 
+var selected = "Han"; // TODO calc from mouse
+var year = 777;
+var layer;
 
 var drawDynastyAxes = function() {
     var chart = d3.select("#dynasties");
-    var selected = "Han"; // TODO calc from mouse
 
     var scale = d3.scale.linear()
         .domain([dynasties[0].start, dynasties[dynasties.length-1].end])
@@ -46,7 +48,22 @@ var drawDynastyAxes = function() {
 
 var init = function() {
     drawDynastyAxes();
+    var map = L.mapbox.map('map', 'asolove.gh727mie')
+        .setView([29.7, 113.4], 6);
+
+    layer = L.mapbox.markerLayer().addTo(map);
+    layer.loadURL("prov_pgn.geojson");
+    layer.setFilter(function(feature){ 
+        var ts = feature.properties.timespan;
+        if(!ts) return false;
+        if(typeof ts.end == 'string') {
+            ts.begin = parseInt(ts.begin, 10);
+            ts.end = parseInt(ts.end, 10);
+        }
+        return ts.begin <= year && ts.end >= year;
+    });
 };
 
 window.onload = init;
+
 
