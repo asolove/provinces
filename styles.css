@@ -1,3 +1,8 @@
+@font-face
+{
+    font-family: "HYZhuanShu";
+    src: url('HYZhuanShuF.ttf');
+}
 body { 
     background-color: #dccdb7;
     background-image: url(qRj0I6.png);
@@ -23,7 +28,7 @@ h1 {
     width: 70px;
     margin: 0; 
     padding: 0; 
-    font-family: "HYZhuanShuF";
+    font-family: "HYZhuanShu";
     font-size: 400%; 
     opacity: 0.7; 
     vertical-align: top;
@@ -64,3 +69,6 @@ h1 {
     border: 3px solid rgba(10,0,0,0.7);
 }
 
+.leaflet-marker-pane { 
+    display: none;
+}

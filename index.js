@@ -5,7 +5,7 @@ var dynastyDates = {
     "Norther/Southern Dynasties": [420, 589],
     "Sui": [589, 618],
     "Tang": [618, 907],
-    "?": [907, 960],
+    "Period of Disunity": [907, 960],
     "Song": [960, 1279],
     "Yuan": [1279, 1368],
     "Ming": [1368, 1644],
@@ -21,8 +21,14 @@ var layer;
 var scale;
 var chart;
 var animating = true;
+var layerStyle = {
+    "color": "#000",
+    "stroke": "white",
+    "weight": 2,
+    "opacity": 0.35,
+};
 
-var drawDynastyAxes = function() {
+var first = function() {
     chart = d3.select("#dynasties");
 
     scale = d3.scale.linear()
@@ -46,21 +52,21 @@ var drawDynastyAxes = function() {
         year = Math.round(scale.invert(d3.event.layerY-20));
         update(year);
     });
-
-
 };
 
 var update = function(y) {
     year = y;
 
     layer.setFilter(filterByYear(year));
+    layer.setStyle(layerStyle);
 
     var marker = chart.selectAll("g.marker")
         .data([year])
+        .attr("text-anchor", "end")
         .attr("transform", function(d) { return "translate(34,"+(scale(d)+7)+")"; });
 
     marker.select("text.year")
-        .text(formatYear);
+        .text(function(a){ return a; });
 
     var group = marker.enter().append("g")
             .classed("marker", true);
@@ -74,27 +80,15 @@ var update = function(y) {
         .attr("transform", "translate(22,0)");
 };
 
-var formatYear = function(year) {
-    return year;
-};
-
-
 var init = function() {
-    drawDynastyAxes();
+    first();
     var map = L.mapbox.map('map', 'asolove.pirate-map', { zoomControl: false })
         .setView([29.7, 113.4], 5);
-    var myStyle = {
-        "color": "#ff0",
-        "weight": 2,
-        "opacity": 0.65,
-        "fillColor": "#0f0"
-    };
 
     d3.json("prov_pgn.geojson", function(data) {
-        layer = L.mapbox.markerLayer(data).addTo(map);
-        layer.setStyle(myStyle);
-        layer.options.style = myStyle;
-
+        layer = L.mapbox.markerLayer(data, {style: function(){debugger;}}).addTo(map);
+        layer.setStyle(layerStyle);
+        layer.setFilter(filterByYear(year));
         animate(layer);
     });
 };
