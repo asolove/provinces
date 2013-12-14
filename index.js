@@ -85,7 +85,7 @@ var init = function() {
     var map = L.mapbox.map('map', 'asolove.pirate-map', { zoomControl: false })
         .setView([29.7, 113.4], 5);
 
-    d3.json("prov_pgn.geojson", function(data) {
+    d3.json("prov_pgn_small.geojson", function(data) {
         layer = L.mapbox.markerLayer(data, {style: function(){debugger;}}).addTo(map);
         layer.setStyle(layerStyle);
         layer.setFilter(filterByYear(year));
