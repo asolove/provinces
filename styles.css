@@ -1,0 +1,66 @@
+body { 
+    background-color: #dccdb7;
+    background-image: url(qRj0I6.png);
+    background-image: url(mqVHWE.png);
+    margin:0; 
+    padding:0; 
+    font: 16px/1.4 helvetica, sans-serif;
+}
+
+header { 
+    position:absolute;
+    top: 65px; 
+    bottom: 65px; 
+    right: 40px; 
+    width: 140px;
+    padding: 20px 20px 20px 10px;
+    background-color: #ecddc7;
+    border: 3px solid rgba(10,0,0,0.7);
+}
+
+h1 { 
+    display: inline-block; 
+    width: 70px;
+    margin: 0; 
+    padding: 0; 
+    font-family: "HYZhuanShuF";
+    font-size: 400%; 
+    opacity: 0.7; 
+    vertical-align: top;
+}
+
+#dynasties { 
+    display: inline-block; 
+    cursor: ns-resize; 
+    margin-right: 10px;
+}
+
+#dynasties g rect {
+    fill: #000;
+    opacity: 0.4;
+    stroke: white;
+}
+
+#dynasties g text {
+    display: none;
+}
+
+#dynasties g.selected text,
+#dynasties g.marker text {
+    display: block;
+}
+
+#dynasties g.marker text {
+    font-weight: bold;
+    opacity: 0.6;
+}
+
+#map { 
+    position:absolute; 
+    top:65px; 
+    bottom:65px; 
+    left: 40px; 
+    right: 290px;
+    border: 3px solid rgba(10,0,0,0.7);
+}
+

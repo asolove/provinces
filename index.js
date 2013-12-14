@@ -32,7 +32,7 @@ var drawDynastyAxes = function() {
     var bar = chart.selectAll("g")
         .data(dynasties)
         .enter().append("g")
-            .attr("transform", function(d){ return "translate(45,"+scale(d.start)+")"; });
+            .attr("transform", function(d){ return "translate(35,"+scale(d.start)+")"; });
 
     bar.append("rect")
         .attr("width", 6)
@@ -57,7 +57,7 @@ var update = function(y) {
 
     var marker = chart.selectAll("g.marker")
         .data([year])
-        .attr("transform", function(d) { return "translate(40,"+scale(d)+")"; });
+        .attr("transform", function(d) { return "translate(34,"+(scale(d)+7)+")"; });
 
     marker.select("text.year")
         .text(formatYear);
@@ -71,7 +71,7 @@ var update = function(y) {
     group.append("text")
         .classed("text", true)
         .text("◀")
-        .attr("transform", "translate(25,0)");
+        .attr("transform", "translate(22,0)");
 };
 
 var formatYear = function(year) {
@@ -100,7 +100,7 @@ var init = function() {
 };
 
 var animate = function() {
-    update(year+1);
+    update(year+3);
     if(!animating || year > 1910) return;
     setTimeout(animate, 32);
 };
