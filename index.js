@@ -1,7 +1,5 @@
 
 var dynastyDates = {
-    "Qin": [-221, -206],
-    "Han": [-206, 220],
     "Three Kingdoms": [220, 280], // overlap here
     "Jin": [280, 420],
     "Norther/Southern Dynasties": [420, 589],
@@ -18,7 +16,7 @@ var dynasties = Object.keys(dynastyDates).map(function(name) {
     return { name: name, start: dynastyDates[name][0], end: dynastyDates[name][1] };
 });
 
-var year = -221;
+var year = 220;
 var layer;
 var scale;
 var chart;
@@ -29,12 +27,12 @@ var drawDynastyAxes = function() {
 
     scale = d3.scale.linear()
         .domain([dynasties[0].start, dynasties[dynasties.length-1].end])
-        .range([0, chart.attr("height")]);
+        .range([20, chart.attr("height")-20]);
         
     var bar = chart.selectAll("g")
         .data(dynasties)
         .enter().append("g")
-            .attr("transform", function(d){ return "translate(0,"+scale(d.start)+")"; });
+            .attr("transform", function(d){ return "translate(45,"+scale(d.start)+")"; });
 
     bar.append("rect")
         .attr("width", 6)
@@ -45,9 +43,10 @@ var drawDynastyAxes = function() {
     d3.select("body").on("mouseup", function(){ dragging = false; });
     chart.on('mousemove', function(d){
         if (!dragging) return;
-        year = scale.invert(d3.event.offsetY);
+        year = Math.round(scale.invert(d3.event.layerY-20));
         update(year);
     });
+
 
 };
 
@@ -58,20 +57,25 @@ var update = function(y) {
 
     var marker = chart.selectAll("g.marker")
         .data([year])
-        .attr("transform", function(d) { return "translate(0,"+scale(d)+")"; });
+        .attr("transform", function(d) { return "translate(40,"+scale(d)+")"; });
 
-    marker.select("text")
+    marker.select("text.year")
         .text(formatYear);
 
-    marker.enter().append("g")
-            .classed("marker", true)
-            .append("text")
-            .select("text")
-                .attr("transform", "translate(30,0)");
+    var group = marker.enter().append("g")
+            .classed("marker", true);
+
+    group.append("text")
+        .classed("year", true);
+
+    group.append("text")
+        .classed("text", true)
+        .text("◀")
+        .attr("transform", "translate(25,0)");
 };
 
 var formatYear = function(year) {
-    return year < 0 ? ""+(-year)+" BCE" : year+" CE";
+    return year;
 };
 
 
@@ -97,7 +101,7 @@ var init = function() {
 
 var animate = function() {
     update(year+1);
-    if(!animating || year > 1278) return;
+    if(!animating || year > 1910) return;
     setTimeout(animate, 32);
 };
 
